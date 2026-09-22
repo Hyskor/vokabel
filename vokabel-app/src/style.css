@@ -230,7 +230,6 @@ input:focus-visible {
 
 /* —— Flashcards —— */
 .card-stage {
-  perspective: 1200px;
   min-height: 280px;
 }
 
@@ -238,20 +237,11 @@ input:focus-visible {
   position: relative;
   width: 100%;
   min-height: 280px;
-  transform-style: preserve-3d;
-  transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
   cursor: pointer;
   animation: rise 0.5s ease-out both;
 }
 
-.flash-card.flipped {
-  transform: rotateY(180deg);
-}
-
 .face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
   background: var(--card);
   border-radius: calc(var(--radius) + 0.25rem);
   box-shadow: var(--shadow);
@@ -262,11 +252,27 @@ input:focus-visible {
   justify-content: center;
   text-align: center;
   gap: 0.65rem;
+  min-height: 280px;
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.face.front {
+  transform: scale(1) rotateY(0deg);
 }
 
 .face.back {
-  transform: rotateY(180deg);
+  display: none;
   background: linear-gradient(160deg, #fffdf8 0%, #e8f7d8 100%);
+  transform: scale(0.96);
+}
+
+.flash-card.flipped .face.front {
+  display: none;
+}
+
+.flash-card.flipped .face.back {
+  display: flex;
+  animation: card-reveal 0.35s ease-out both;
 }
 
 .face-label {
@@ -517,6 +523,17 @@ input:focus-visible {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes card-reveal {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }
 
